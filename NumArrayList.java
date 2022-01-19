@@ -1,13 +1,14 @@
 // 1.13 16:41 complete the interface
 interface NumList{
-    public int size();                         // return the number of elements of NumArrayList
-    public int capacity();                     // return the capacity of NumArrayList
-    public void add(double value);             // add a value to the end of NumArrayList.
-    public void insert(int i, double value);   // inserts a element before i-th element. using 0 as start. 
-    public void remove(int i);                 // remove the i-th element. do nothing if i > size
-    public boolean equals(NumList otherList);  // returns true if the otherList equals the other list.
-    public void removeDuplicates();            // remove duplicates of any elements in the list.
-    public String toString();                  // convert the list to a String.
+    public int size();                                             // return the number of elements of NumArrayList
+    public int capacity();                                         // return the capacity of NumArrayList
+    public void add(double value);                                 // add a value to the end of NumArrayList.
+    public void insert(int i, double value);                       // inserts a element before i-th element. using 0 as start. 
+    public void remove(int i);                                     // remove the i-th element. do nothing if i > size
+    public double lookup(int i) throws NotVaildIndexException;     // look for the i-th element. throw an exception if not found. 
+    public boolean equals(NumList otherList);                      // returns true if the otherList equals the other list.
+    public void removeDuplicates();                                // remove duplicates of any elements in the list.
+    public String toString();                                      // convert the list to a String.
 }
 
 public class NumArrayList implements NumList{
@@ -119,15 +120,25 @@ public class NumArrayList implements NumList{
             return false;
         }
         for(int i = 0; i < elements - 1; i++){
-            if(otherList.lookup(i) != array[i]){
-                return 
+            try {
+                if(otherList.lookup(i) != array[i]){
+                    return false;
+                }
+            } catch (NotVaildIndexException e) {
+                System.out.println("This index is not vaild");
             }
         }
+        return true;
 
     }
 
     public void removeDuplicates(){
-        
+        int[] newArray = new int[elements];
+        for(int i = 0; i < elements - 1; i++){
+            for(int j = i; j > 0; j--){
+                
+            }
+        }
     }
 
     public String toString(){
