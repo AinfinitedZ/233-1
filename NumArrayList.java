@@ -49,7 +49,7 @@ public class NumArrayList implements NumList{
         }
         else{
             this.ExpandIfExceed();
-            array[elements] = value;
+            array[capacity] = value;
             elements++;            
         }
     }
@@ -133,11 +133,14 @@ public class NumArrayList implements NumList{
     }
 
     public void removeDuplicates(){
-        int[] newArray = new int[elements];
-        for(int i = 0; i < elements - 1; i++){
-            for(int j = i; j > 0; j--){
-                
-            }
+        NumArrayList newArray = new NumArrayList();
+        for(int i = 0;i<array.length; i++){
+			for(int j = i + 1; j<array.length; j++){
+				if(array[i] == array[j]){
+					j = ++i;
+				}
+			}
+			newArray.add(array[i]);
         }
     }
 
