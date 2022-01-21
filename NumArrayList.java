@@ -1,6 +1,7 @@
-import org.jetbrains.annotations.NotNull;
-
-// 1.13 16:41 complete the interface
+/**
+ * Interface <code>NumList</code> contains all abstract methods that must be inherited in 
+ * <code>NumArrayList</code>. 
+ */
 interface NumList{
     int size();                                             // return the number of elements of NumArrayList
     int capacity();                                         // return the capacity of NumArrayList
@@ -13,10 +14,32 @@ interface NumList{
     void removeDuplicates() throws NotValidIndexException;  // remove duplicates of any elements in the list.
     String toString();                                      // convert the list to a String.
 }
-
+/**
+ * This body contains all methods and interfaces that are used in JUnit tests and other body methods.
+ * Type <code>NumArrayList</code> provides methods that similar to Type <code>ArrayList</code>, including
+ * <code>insert()</code>, <code>remove()</code>. A <code>NumArrayList</code> would contains two attributes: 
+ * <code>capacity</code>, which is total available space; <code>elements</code>, which is the total number of 
+ * elements; 
+ * <br></br>
+ * Here are some example about how to use <code>NumArrayList</code>:
+ * <br></br>
+ * Considering a <code>testArray</code> in type of <code>NumArrayList</code>. That <code>testArray</code> 
+ * is consist of {1.0, 3.0, 5.0, 7.0, 3.0, 9.0};
+ * 
+ * <dl>
+ * <dt>•<code>testArray.add(3.0);</code> would result {1.0, 3.0, 5.0, 7.0, 3.0, 9.0, 3.0}</dt>
+ * <dt>•<code>testArray.insert(2, 3.0);</code> would result {1.0, 3.0, 3.0, 5.0, 7.0, 3.0, 9.0}.</dt>
+ * <dt>•<code>testArray.remove(3);</code> would result {1.0, 3.0, 5.0, 3.0, 9.0}.</dt>
+ * <dt>•<code>testArray.lookup(3);</code> would return 7.0.</dt>
+ * <dt>•<code>testArray.contains(5.0);</code> would return <code>true</code>.</dt>
+ * <dt>•<code>testArray.equals({1.0, 3.0, 5.0}) would return <code>false</code>.</dt>
+ * <dt>•<code>testArray.removeDuplicate()</code> would result {1.0, 3.0, 5.0, 7.0, 9.0}.</dt>
+ * <dt>•<code>testArray.toString()</code> would return "1.0 3.0 5.0 7.0 3.0 9.0 ";</dt>
+ * </dl>
+ */
 public class NumArrayList implements NumList{
     // variable that store the capacity of array. 
-    private int capacity;
+    private int capacity = 0;
     // Using null as an initial value; Avoid ambiguous if/else statement when considering 0.0
     private Double[] array;
     // variable that store the number of current elements
@@ -45,7 +68,7 @@ public class NumArrayList implements NumList{
      * increase the capacity of array by 1 unit. Trigger when current capacity is not enough
      * for additional element.
      */
-    public void ExpandIfExceed() {
+    private void ExpandIfExceed() {
         Double[] newArray = new Double[capacity + 1];
         if (capacity != 0) {
             System.arraycopy(array, 0, newArray, 0, capacity);
@@ -124,7 +147,8 @@ public class NumArrayList implements NumList{
 
     
     /** 
-     * Remove the <code>i</code>-th element Do nothing if the <code>i</code>-th element does not exist.
+     * Remove the <code>i</code>-th element and advance all elements behind. 
+     * Do nothing if the <code>i</code>-th element does not exist.
      * @param i index of array
      */
     public void remove(int i){
@@ -180,11 +204,12 @@ public class NumArrayList implements NumList{
     
     /** 
      * Determining whether two <code>NumArrayList</code> is equal. Two <code>NumArrayList</code>
-     * is equal if every element with same index are equal in both lists. 
+     * is equal if every element with same index are equal in both lists, and both of their capacity
+     * and elements are equal. 
      * @param otherList NumArrayList passed to function that used to compare
      * @return TwoListEqual
      */
-    public boolean equals(@NotNull NumList otherList){
+    public boolean equals(NumList otherList){
         if(otherList.capacity() != this.capacity()){
             return false;
         }

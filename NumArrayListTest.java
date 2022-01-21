@@ -1,3 +1,8 @@
+/**
+ * This Test file focus on JUnit tests. Most tests follows rules "test zero, one, normal" while
+ * rules "test head, body, tail" are also used when needed. 
+ * @author dxl746
+ */
 import org.junit.Test;
 
 import static org.junit.Assert.*;
