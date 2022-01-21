@@ -19,9 +19,11 @@ interface NumList{
  * Type <code>NumArrayList</code> provides methods that similar to Type <code>ArrayList</code>, including
  * <code>insert()</code>, <code>remove()</code>. A <code>NumArrayList</code> would contains two attributes: 
  * <code>capacity</code>, which is total available space; <code>elements</code>, which is the total number of 
- * elements; 
+ * elements;
+ * <br></br>
  * <br></br>
  * Here are some example about how to use <code>NumArrayList</code>:
+ * <br></br>
  * <br></br>
  * Considering a <code>testArray</code> in type of <code>NumArrayList</code>. That <code>testArray</code> 
  * is consist of {1.0, 3.0, 5.0, 7.0, 3.0, 9.0};
