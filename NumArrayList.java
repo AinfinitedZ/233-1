@@ -12,21 +12,37 @@ interface NumList{
 }
 
 public class NumArrayList implements NumList{
+    // variable that store the capacity of array. 
     private int capacity = 0;
-    private double[] array;
+    // Using null as an initial value; Avoid ambigious if/else statement when considering 0.0
+    private Double[] array;
+    // variable that store the number of current elements
     private int elements = 0;
 
+    /**
+     * For those NumArrayList variable without input, one would construct initial NumArrayList 
+     * with zero capacity. 
+     */
     public NumArrayList(){
-        this.array = new double[0];
+        this.array = new Double[0];
     }
 
+    /**
+     * For those NumArrayList with specific input, one would construct initial NumArrayList 
+     * with parameter
+     * @param capacity
+     */
     public NumArrayList(int capacity){
-        this.array = new double[capacity];
+        this.array = new Double[capacity];
         this.capacity = capacity;
     }
 
+    /**
+     * increase the capacity of array by 1 unit. Trigger when current capacity is not enough
+     * for additional element.
+     */
     private void ExpandIfExceed(){
-        double[] newArray = new double[capacity + 1];
+        Double[] newArray = new Double[capacity + 1];
         capacity++;
         for(int i = 0; i < capacity - 1; i++){
             newArray[i] = array[i];
@@ -34,14 +50,28 @@ public class NumArrayList implements NumList{
         this.array = newArray;
     }
 
+    
+    /** 
+     * @return the number of elements
+     */
     public int size(){
         return this.elements;
     }
 
+    
+    /** 
+     * @return the value of capacity
+     */
     public int capacity(){
         return this.capacity;
     }
 
+    
+    /** 
+     * Accept a double value and place that input at the end of the array. Able to 
+     * expand the array if needed. 
+     * @param value
+     */
     public void add(double value){
         if(elements < capacity){
             array[elements] = value;
@@ -54,6 +84,14 @@ public class NumArrayList implements NumList{
         }
     }
 
+    
+    /** 
+     * place the <code>value</code> at <code>i</code>-th index of the array and defer  
+     * the subsequent values. If the array has elements that fewer than <code>i</code>,
+     * adding that value to the end of array. Able to Expand the array if needed. 
+     * @param i
+     * @param value
+     */
     public void insert(int i, double value){
         double intermediateVal;
         if(elements < capacity){
@@ -82,8 +120,14 @@ public class NumArrayList implements NumList{
         }   
     }
 
+    
+    /** 
+     * Remove the <code>i</code>-th element and advance the subsequent elements. Do nothing
+     * if the <code>i</code>-th element does not exist.
+     * @param i
+     */
     public void remove(int i){
-        double[] newArray = new double[elements - 1];
+        Double[] newArray = new Double[elements - 1];
         if(elements >= i){
             for(int j = 0; j < i - 1; j++){
                 newArray[j] = array[j];
@@ -91,9 +135,17 @@ public class NumArrayList implements NumList{
             for(int j = i; j < elements - 1; j++){
                 newArray[j] = array[j+1];
             }
+            this.array = newArray;
         }
     }
 
+    
+    /** 
+     * Determining whether <code>value</code> exist in array. Return <code>true</code> if 
+     * exist. 
+     * @param value
+     * @return DoesValueExist
+     */
     public boolean contains(double value){
         for(int i = 0; i < elements; i++){
             if(array[i] == value){
@@ -103,6 +155,13 @@ public class NumArrayList implements NumList{
         return false;
     }
 
+    
+    /** 
+     * Return <code>i</code>-th element in the array. 
+     * @param i
+     * @return i-th element
+     * @throws NotValidIndexException
+     */
     public double lookup(int i) throws NotValidIndexException{
         if(elements < i){
             throw new NotValidIndexException("This index is not valid");
@@ -112,6 +171,13 @@ public class NumArrayList implements NumList{
         }
     }
 
+    
+    /** 
+     * Determining whether two <code>NumArrayList</code> is equal. Two <code>NumArrayList</code>
+     * is equal if every element with same index are equal in both lists. 
+     * @param otherList
+     * @return DoesTwoListEqual
+     */
     public boolean equals(NumList otherList){
         if(otherList.size() == 0 && this.size() == 0){
             return true;
@@ -131,7 +197,10 @@ public class NumArrayList implements NumList{
         return true;
 
     }
-
+    /**
+     * Remove duplicates of elements in array. An element is said duplicate if another element exists 
+     * in array that has same value but lower index. 
+     */
     public void removeDuplicates(){
         NumArrayList newArray = new NumArrayList();
         for(int i = 0;i<array.length; i++){
@@ -144,13 +213,20 @@ public class NumArrayList implements NumList{
         }
     }
 
+    
+    /** 
+     * Print the array to String. Each element would be sepreated by a single space. Return <code>""</code>
+     * if the array is empty. 
+     * @return String
+     */
     public String toString(){
-        StringBuilder result = new StringBuilder();
         if(elements == 0){
-            return result.toString();
+            return "";
         }
+        StringBuilder result = new StringBuilder();
         for(int i = 0; i < elements - 1; i++){
             result.append(array[i]);
+            result.append(" ");
         }
         return result.toString();
     }
