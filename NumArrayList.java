@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 // 1.13 16:41 complete the interface
 interface NumList{
     int size();                                             // return the number of elements of NumArrayList
@@ -8,13 +10,13 @@ interface NumList{
     double lookup(int i) throws NotValidIndexException;     // look for the i-th element. throw an exception if not found.
     boolean contains(double value);                         // return true if the array contains input value.
     boolean equals(NumList otherList);                      // return true if the otherList equals the other list.
-    void removeDuplicates();                                // remove duplicates of any elements in the list.
+    void removeDuplicates() throws NotValidIndexException;  // remove duplicates of any elements in the list.
     String toString();                                      // convert the list to a String.
 }
 
 public class NumArrayList implements NumList{
     // variable that store the capacity of array. 
-    private int capacity = 0;
+    private int capacity;
     // Using null as an initial value; Avoid ambiguous if/else statement when considering 0.0
     private Double[] array;
     // variable that store the number of current elements
@@ -26,12 +28,13 @@ public class NumArrayList implements NumList{
      */
     public NumArrayList(){
         this.array = new Double[0];
+        this.capacity = 0;
     }
 
     /**
      * For those NumArrayList with specific input, one would construct initial NumArrayList 
      * with parameter
-     * @param capacity
+     * @param capacity capacity of array
      */
     public NumArrayList(int capacity){
         this.array = new Double[capacity];
@@ -44,14 +47,11 @@ public class NumArrayList implements NumList{
      */
     public void ExpandIfExceed() {
         Double[] newArray = new Double[capacity + 1];
-        if (capacity == 0) {
-            this.array = newArray;
-            capacity++;
-        } else if (capacity <= elements) {
-            System.arraycopy(array, 0, newArray, 0, capacity - 1);
-            this.array = newArray;
-            capacity++;
+        if (capacity != 0) {
+            System.arraycopy(array, 0, newArray, 0, capacity);
         }
+        this.array = newArray;
+        capacity++;
     }
     
     /** 
@@ -73,15 +73,15 @@ public class NumArrayList implements NumList{
     /** 
      * Accept a double value and place that input at the end of the array. Able to 
      * expand the array if needed. Element would increment after method.
-     * @param value
+     * @param value value that passed to a function
      */
     public void add(double value){
-        if(elements < capacity){
-            array[elements] = value;
+        if(this.size() < this.capacity()){
+            array[this.size()] = value;
         }
         else{
             this.ExpandIfExceed();
-            array[capacity] = value;
+            array[this.capacity() - 1] = value;
         }
         elements++;
     }
@@ -91,14 +91,14 @@ public class NumArrayList implements NumList{
      * place the <code>value</code> at <code>i</code>-th index of the array and defer  
      * the subsequent values. If the array has elements that fewer than <code>i</code>,
      * adding that value to the end of array. Able to Expand the array if needed. 
-     * @param i
-     * @param value
+     * @param i index in array
+     * @param value value passed to function
      */
     public void insert(int i, double value){
         double intermediateVal;
-        if(elements < capacity){
-            if(elements >= i){
-                for(int j = i; j < elements + 1; j++){
+        if(this.size() < this.capacity()){
+            if(this.size() >= i){
+                for(int j = i; j < this.size(); j++){
                     intermediateVal = array[j];
                     array[j] = array[j+1];
                     array[j+1] = intermediateVal;
@@ -106,51 +106,55 @@ public class NumArrayList implements NumList{
                 array[i] = value;
                 elements++;
             }
-            else if(elements < i){
+            else {
                 this.add(value);
             }
         }
         else{
             this.ExpandIfExceed();
-            for(int j = i; j < elements + 1; j++){
+            for(int j = i; j < this.size(); j++){
                 intermediateVal = array[j];
                 array[j] = array[j+1];
                 array[j+1] = intermediateVal;
             }
-            array[i] = value;
+            array[this.capacity() - 1] = value;
             elements++;
         }   
     }
 
     
     /** 
-     * Remove the <code>i</code>-th element and advance the subsequent elements. Do nothing
-     * if the <code>i</code>-th element does not exist.
-     * @param i
+     * Remove the <code>i</code>-th element Do nothing if the <code>i</code>-th element does not exist.
+     * @param i index of array
      */
     public void remove(int i){
-        Double[] newArray = new Double[elements - 1];
-        if(elements >= i){
-            for(int j = 0; j < i - 1; j++){
-                newArray[j] = array[j];
+        if(i >= 0){
+            if(this.capacity() > 0 && this.size() >= i) {
+                /*
+                  Although the last element exist in the array, the decrement of elements restricts
+                  one's access. That element would possibly be overwritten in the future.
+                 */
+                if (this.size() - 1 - i >= 0) System.arraycopy(array, i + 1, array, i, this.size() - 1 - i);
+                elements--;
+                capacity--;
             }
-            for(int j = i; j < elements - 1; j++){
-                newArray[j] = array[j + 1];
-            }
-            this.array = newArray;
         }
     }
 
     
     /** 
      * Determining whether <code>value</code> exist in array. Return <code>true</code> if exists.
-     * @param value
-     * @return DoesValueExist
+     * @param value value that passed to function
+     * @return ValueExist
      */
     public boolean contains(double value){
-        for(int i = 0; i < elements; i++){
-            if(array[i] == value){
-                return true;
+        for(int i = 0; i < this.size(); i++){
+            try {
+                if(this.lookup(i) == value){
+                    return true;
+                }
+            } catch (NotValidIndexException e) {
+                System.out.println("This index is not valid");
             }
         }
         return false;
@@ -160,12 +164,12 @@ public class NumArrayList implements NumList{
     /** 
      * Return <code>i</code>-th element in the array. <code>i</code> start from 0. Throw
      * NotValidIndexException if <code>i + 1</code> is less than the number of elements.
-     * @param i
+     * @param i index
      * @return <code>i</code>-th element
-     * @throws NotValidIndexException
+     * @throws NotValidIndexException index passed to function is out of bound
      */
     public double lookup(int i) throws NotValidIndexException{
-        if(elements < (i + 1)){
+        if(this.size() < (i + 1)){
             throw new NotValidIndexException("This index is not valid");
         }
         else{
@@ -177,19 +181,22 @@ public class NumArrayList implements NumList{
     /** 
      * Determining whether two <code>NumArrayList</code> is equal. Two <code>NumArrayList</code>
      * is equal if every element with same index are equal in both lists. 
-     * @param otherList
-     * @return DoesTwoListEqual
+     * @param otherList NumArrayList passed to function that used to compare
+     * @return TwoListEqual
      */
-    public boolean equals(NumList otherList){
-        if(otherList.size() == 0 && this.size() == 0){
+    public boolean equals(@NotNull NumList otherList){
+        if(otherList.capacity() != this.capacity()){
+            return false;
+        }
+        else if(otherList.size() == 0 && this.size() == 0){
             return true;
         }
         else if(otherList.size() != this.size()){
             return false;
         }
-        for(int i = 0; i < elements - 1; i++){
+        for(int i = 0; i < this.size() - 1; i++){
             try {
-                if(otherList.lookup(i) != array[i]){
+                if(otherList.lookup(i) != this.lookup(i)){
                     return false;
                 }
             } catch (NotValidIndexException e) {
@@ -200,15 +207,15 @@ public class NumArrayList implements NumList{
 
     }
     /**
-     * Remove duplicates of elements in array. An element is said duplicate if another element exists 
-     * in array that has same valued but lower index.
+     * Remove duplicates of elements in array. An element 'A' is said duplicate if another element exists
+     * in array that equal to A, but has lower index.
      */
-    public void removeDuplicates(){
+    public void removeDuplicates() throws NotValidIndexException {
         NumArrayList newArray = new NumArrayList();
-        for(int i = 0;i<array.length; i++){
-			for(int j = i + 1; j<array.length; j++){
-				if(array[i].equals(array[j])){
-					j = ++i;
+        for(int i = 0; i < this.size() - 1; i++){
+			for(int j = i + 1; j < this.size(); j++){
+				if(this.lookup(i) == this.lookup(j)){
+					this.remove(j);
 				}
 			}
 			newArray.add(array[i]);
@@ -222,11 +229,11 @@ public class NumArrayList implements NumList{
      * @return String
      */
     public String toString(){
-        if(elements == 0){
+        if(this.size() == 0){
             return "";
         }
         StringBuilder result = new StringBuilder();
-        for(int i = 0; i < elements - 1; i++){
+        for(int i = 0; i < this.size(); i++){
             result.append(array[i]);
             result.append(" ");
         }
