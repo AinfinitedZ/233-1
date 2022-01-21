@@ -1,14 +1,14 @@
 // 1.13 16:41 complete the interface
 interface NumList{
-    public int size();                                             // return the number of elements of NumArrayList
-    public int capacity();                                         // return the capacity of NumArrayList
-    public void add(double value);                                 // add a value to the end of NumArrayList.
-    public void insert(int i, double value);                       // inserts a element before i-th element. using 0 as start. 
-    public void remove(int i);                                     // remove the i-th element. do nothing if i > size
-    public double lookup(int i) throws NotVaildIndexException;     // look for the i-th element. throw an exception if not found. 
-    public boolean equals(NumList otherList);                      // returns true if the otherList equals the other list.
-    public void removeDuplicates();                                // remove duplicates of any elements in the list.
-    public String toString();                                      // convert the list to a String.
+    int size();                                             // return the number of elements of NumArrayList
+    int capacity();                                         // return the capacity of NumArrayList
+    void add(double value);                                 // add a value to the end of NumArrayList.
+    void insert(int i, double value);                       // inserts a element before i-th element. using 0 as start.
+    void remove(int i);                                     // remove the i-th element. do nothing if i > size
+    double lookup(int i) throws NotValidIndexException;     // look for the i-th element. throw an exception if not found.
+    boolean equals(NumList otherList);                      // returns true if the otherList equals the other list.
+    void removeDuplicates();                                // remove duplicates of any elements in the list.
+    String toString();                                      // convert the list to a String.
 }
 
 public class NumArrayList implements NumList{
@@ -50,7 +50,7 @@ public class NumArrayList implements NumList{
         else{
             this.ExpandIfExceed();
             array[capacity] = value;
-            elements++;            
+            elements++;
         }
     }
 
@@ -103,9 +103,9 @@ public class NumArrayList implements NumList{
         return false;
     }
 
-    public double lookup(int i) throws NotVaildIndexException{
+    public double lookup(int i) throws NotValidIndexException{
         if(elements < i){
-            throw new NotVaildIndexException("This index is not vaild");
+            throw new NotValidIndexException("This index is not valid");
         }
         else{
             return array[i];
@@ -124,8 +124,8 @@ public class NumArrayList implements NumList{
                 if(otherList.lookup(i) != array[i]){
                     return false;
                 }
-            } catch (NotVaildIndexException e) {
-                System.out.println("This index is not vaild");
+            } catch (NotValidIndexException e) {
+                System.out.println("This index is not valid");
             }
         }
         return true;
@@ -145,14 +145,14 @@ public class NumArrayList implements NumList{
     }
 
     public String toString(){
-        String result = "";
+        StringBuilder result = new StringBuilder();
         if(elements == 0){
-            return result;
+            return result.toString();
         }
         for(int i = 0; i < elements - 1; i++){
-            result = result + array[i]; 
+            result.append(array[i]);
         }
-        return result;
+        return result.toString();
     }
 
 }
