@@ -6,7 +6,8 @@ interface NumList{
     void insert(int i, double value);                       // inserts a element before i-th element. using 0 as start.
     void remove(int i);                                     // remove the i-th element. do nothing if i > size
     double lookup(int i) throws NotValidIndexException;     // look for the i-th element. throw an exception if not found.
-    boolean equals(NumList otherList);                      // returns true if the otherList equals the other list.
+    boolean contains(double value);                         // return true if the array contains input value.
+    boolean equals(NumList otherList);                      // return true if the otherList equals the other list.
     void removeDuplicates();                                // remove duplicates of any elements in the list.
     String toString();                                      // convert the list to a String.
 }
@@ -14,7 +15,7 @@ interface NumList{
 public class NumArrayList implements NumList{
     // variable that store the capacity of array. 
     private int capacity = 0;
-    // Using null as an initial value; Avoid ambigious if/else statement when considering 0.0
+    // Using null as an initial value; Avoid ambiguous if/else statement when considering 0.0
     private Double[] array;
     // variable that store the number of current elements
     private int elements = 0;
@@ -41,15 +42,17 @@ public class NumArrayList implements NumList{
      * increase the capacity of array by 1 unit. Trigger when current capacity is not enough
      * for additional element.
      */
-    private void ExpandIfExceed(){
+    public void ExpandIfExceed() {
         Double[] newArray = new Double[capacity + 1];
-        capacity++;
-        for(int i = 0; i < capacity - 1; i++){
-            newArray[i] = array[i];
+        if (capacity == 0) {
+            this.array = newArray;
+            capacity++;
+        } else if (capacity <= elements) {
+            System.arraycopy(array, 0, newArray, 0, capacity - 1);
+            this.array = newArray;
+            capacity++;
         }
-        this.array = newArray;
     }
-
     
     /** 
      * @return the number of elements
@@ -69,19 +72,18 @@ public class NumArrayList implements NumList{
     
     /** 
      * Accept a double value and place that input at the end of the array. Able to 
-     * expand the array if needed. 
+     * expand the array if needed. Element would increment after method.
      * @param value
      */
     public void add(double value){
         if(elements < capacity){
             array[elements] = value;
-            elements++;
         }
         else{
             this.ExpandIfExceed();
             array[capacity] = value;
-            elements++;
         }
+        elements++;
     }
 
     
@@ -133,7 +135,7 @@ public class NumArrayList implements NumList{
                 newArray[j] = array[j];
             }
             for(int j = i; j < elements - 1; j++){
-                newArray[j] = array[j+1];
+                newArray[j] = array[j + 1];
             }
             this.array = newArray;
         }
@@ -141,8 +143,7 @@ public class NumArrayList implements NumList{
 
     
     /** 
-     * Determining whether <code>value</code> exist in array. Return <code>true</code> if 
-     * exist. 
+     * Determining whether <code>value</code> exist in array. Return <code>true</code> if exists.
      * @param value
      * @return DoesValueExist
      */
@@ -157,13 +158,14 @@ public class NumArrayList implements NumList{
 
     
     /** 
-     * Return <code>i</code>-th element in the array. 
+     * Return <code>i</code>-th element in the array. <code>i</code> start from 0. Throw
+     * NotValidIndexException if <code>i + 1</code> is less than the number of elements.
      * @param i
-     * @return i-th element
+     * @return <code>i</code>-th element
      * @throws NotValidIndexException
      */
     public double lookup(int i) throws NotValidIndexException{
-        if(elements < i){
+        if(elements < (i + 1)){
             throw new NotValidIndexException("This index is not valid");
         }
         else{
@@ -199,13 +201,13 @@ public class NumArrayList implements NumList{
     }
     /**
      * Remove duplicates of elements in array. An element is said duplicate if another element exists 
-     * in array that has same value but lower index. 
+     * in array that has same valued but lower index.
      */
     public void removeDuplicates(){
         NumArrayList newArray = new NumArrayList();
         for(int i = 0;i<array.length; i++){
 			for(int j = i + 1; j<array.length; j++){
-				if(array[i] == array[j]){
+				if(array[i].equals(array[j])){
 					j = ++i;
 				}
 			}
@@ -215,7 +217,7 @@ public class NumArrayList implements NumList{
 
     
     /** 
-     * Print the array to String. Each element would be sepreated by a single space. Return <code>""</code>
+     * Print the array to String. Each element would be separated by a single space. Return <code>""</code>
      * if the array is empty. 
      * @return String
      */
