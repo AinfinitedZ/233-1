@@ -32,7 +32,7 @@ interface NumList{
  * <dt>•<code>testArray.remove(3);</code> would result {1.0, 3.0, 5.0, 3.0, 9.0}.</dt>
  * <dt>•<code>testArray.lookup(3);</code> would return 7.0.</dt>
  * <dt>•<code>testArray.contains(5.0);</code> would return <code>true</code>.</dt>
- * <dt>•<code>testArray.equals({1.0, 3.0, 5.0}) would return <code>false</code>.</dt>
+ * <dt>•<code>testArray.equals({1.0, 3.0, 5.0})</code> would return <code>false</code>.</dt>
  * <dt>•<code>testArray.removeDuplicate()</code> would result {1.0, 3.0, 5.0, 7.0, 9.0}.</dt>
  * <dt>•<code>testArray.toString()</code> would return "1.0 3.0 5.0 7.0 3.0 9.0 ";</dt>
  * </dl>
