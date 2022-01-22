@@ -41,7 +41,7 @@ interface NumList{
  */
 public class NumArrayList implements NumList{
     // variable that store the capacity of array. 
-    private int capacity = 0;
+    private int capacity;
     // Using null as an initial value; Avoid ambiguous if/else statement when considering 0.0
     private Double[] array;
     // variable that store the number of current elements
@@ -120,14 +120,9 @@ public class NumArrayList implements NumList{
      * @param value value passed to function
      */
     public void insert(int i, double value){
-        double intermediateVal;
         if(this.size() < this.capacity()){
             if(this.size() >= i){
-                for(int j = i; j < this.size(); j++){
-                    intermediateVal = array[j];
-                    array[j] = array[j+1];
-                    array[j+1] = intermediateVal;
-                }
+                if (this.size() - i >= 0) System.arraycopy(array, i, array, i + 1, this.size() - i);
                 array[i] = value;
                 elements++;
             }
@@ -137,11 +132,7 @@ public class NumArrayList implements NumList{
         }
         else{
             this.ExpandIfExceed();
-            for(int j = i; j < this.size(); j++){
-                intermediateVal = array[j];
-                array[j] = array[j+1];
-                array[j+1] = intermediateVal;
-            }
+            if (this.size() - i >= 0) System.arraycopy(array, i, array, i + 1, this.size() - i);
             array[this.capacity() - 1] = value;
             elements++;
         }   

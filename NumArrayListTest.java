@@ -12,6 +12,7 @@ public class NumArrayListTest {
     // a relative small number for assertequals(double, double, DELTA) method in JUnit test.
     private static final double DELTA = 1E-15;
 
+    /**
     // this following unit is tested when <code>ExpandIfExceed()</code> is public method.
     @Test
     public void ExpandIfExceed() {
@@ -25,6 +26,7 @@ public class NumArrayListTest {
         // normal test.
         assertEquals("3.0 5.0 ", testArray.toString());
     }
+    */
 
     @Test
     public void size() {
