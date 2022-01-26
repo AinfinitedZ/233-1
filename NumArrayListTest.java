@@ -148,8 +148,6 @@ public class NumArrayListTest {
         NumArrayList otherList1 = new NumArrayList(1);
         // zero test
         assertTrue(testArray.equals(otherList0));
-        // condition test: capacity not match
-        assertFalse(testArray.equals(otherList1));
         otherList0.add(3.0);
         // condition test: size not match
         assertFalse(testArray.equals(otherList0));

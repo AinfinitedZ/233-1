@@ -203,10 +203,7 @@ public class NumArrayList implements NumList{
      * @return TwoListEqual
      */
     public boolean equals(NumList otherList){
-        if(otherList.capacity() != this.capacity()){
-            return false;
-        }
-        else if(otherList.size() == 0 && this.size() == 0){
+        if(otherList.size() == 0 && this.size() == 0){
             return true;
         }
         else if(otherList.size() != this.size()){
