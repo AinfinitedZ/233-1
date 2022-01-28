@@ -146,7 +146,7 @@ public class NumArrayList implements NumList{
      */
     public void remove(int i){
         if(i >= 0){
-            if(this.capacity() > 0 && this.size() >= i) {
+            if(this.capacity() > 0 && this.size() >= (i - 1)) {
                 /*
                   Although the last element exist in the array, the decrement of elements restricts
                   one's access. That element would possibly be overwritten in the future.
